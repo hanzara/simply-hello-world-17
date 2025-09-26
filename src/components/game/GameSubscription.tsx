@@ -31,8 +31,8 @@ const GameSubscription: React.FC<GameSubscriptionProps> = ({ currentBalance, onS
     {
       id: 'basic',
       name: 'Basic Premium',
-      monthlyPrice: 150,
-      annualPrice: 1500,
+      monthlyPrice: 50,
+      annualPrice: 500,
       color: 'from-blue-500 to-indigo-600',
       features: [
         'Double points per game',
@@ -47,8 +47,8 @@ const GameSubscription: React.FC<GameSubscriptionProps> = ({ currentBalance, onS
     {
       id: 'premium',
       name: 'Premium Plus',
-      monthlyPrice: 300,
-      annualPrice: 3000,
+      monthlyPrice: 100,
+      annualPrice: 1000,
       color: 'from-purple-500 to-pink-600',
       features: [
         'Triple points per game',
@@ -65,8 +65,8 @@ const GameSubscription: React.FC<GameSubscriptionProps> = ({ currentBalance, onS
     {
       id: 'ultimate',
       name: 'Ultimate Champion',
-      monthlyPrice: 500,
-      annualPrice: 5000,
+      monthlyPrice: 200,
+      annualPrice: 2000,
       color: 'from-yellow-500 to-orange-600',
       features: [
         'Quadruple points per game',

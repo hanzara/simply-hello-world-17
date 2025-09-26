@@ -34,11 +34,11 @@ const GameLobby: React.FC<GameLobbyProps> = ({ nextGameTime, onGameStart, player
       description: 'Stock markets, crypto, banking',
       difficulty: 'Medium',
       maxPoints: 1000,
-      entryFee: 20,
-      maxWinnings: 80, // 4x return max (20% house edge when all correct)
+      entryFee: 5,
+      maxWinnings: 25, // 5x return max
       players: 89,
       color: 'from-green-500 to-emerald-600',
-      houseEdge: '15%'
+      houseEdge: '8%'
     },
     {
       id: 'business',
@@ -47,11 +47,11 @@ const GameLobby: React.FC<GameLobbyProps> = ({ nextGameTime, onGameStart, player
       description: 'Entrepreneurship, economics, trade',
       difficulty: 'Hard',
       maxPoints: 1500,
-      entryFee: 50,
-      maxWinnings: 200, // 4x return max (20% house edge)
+      entryFee: 10,
+      maxWinnings: 45, // 4.5x return max
       players: 67,
       color: 'from-blue-500 to-indigo-600',
-      houseEdge: '20%'
+      houseEdge: '10%'
     },
     {
       id: 'technology',
@@ -60,11 +60,11 @@ const GameLobby: React.FC<GameLobbyProps> = ({ nextGameTime, onGameStart, player
       description: 'Fintech, blockchain, innovation',
       difficulty: 'Medium',
       maxPoints: 800,
-      entryFee: 15,
-      maxWinnings: 60, // 4x return max
+      entryFee: 5,
+      maxWinnings: 22, // 4.4x return max
       players: 134,
       color: 'from-purple-500 to-violet-600',
-      houseEdge: '12%'
+      houseEdge: '6%'
     },
     {
       id: 'general',
@@ -73,11 +73,11 @@ const GameLobby: React.FC<GameLobbyProps> = ({ nextGameTime, onGameStart, player
       description: 'Mixed topics, current events',
       difficulty: 'Easy',
       maxPoints: 500,
-      entryFee: 10,
-      maxWinnings: 35, // 3.5x return max (house always wins)
+      entryFee: 3,
+      maxWinnings: 12, // 4x return max
       players: 203,
       color: 'from-orange-500 to-red-600',
-      houseEdge: '25%'
+      houseEdge: '5%'
     },
     {
       id: 'premium',
@@ -86,11 +86,11 @@ const GameLobby: React.FC<GameLobbyProps> = ({ nextGameTime, onGameStart, player
       description: 'High stakes, expert level',
       difficulty: 'Expert',
       maxPoints: 3000,
-      entryFee: 100,
-      maxWinnings: 350, // 3.5x return max
+      entryFee: 25,
+      maxWinnings: 100, // 4x return max
       players: 23,
       color: 'from-yellow-500 to-orange-600',
-      houseEdge: '30%',
+      houseEdge: '15%',
       isPremium: true
     }
   ];
@@ -136,7 +136,7 @@ const GameLobby: React.FC<GameLobbyProps> = ({ nextGameTime, onGameStart, player
           {!canPlay && (
             <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
               <p className="text-sm text-orange-700">
-                Minimum balance of KSh 10 required to play. Please deposit funds to continue.
+                Minimum balance of KSh 3 required to play. Please deposit funds to continue.
               </p>
             </div>
           )}
