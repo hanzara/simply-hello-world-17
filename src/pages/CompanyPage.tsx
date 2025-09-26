@@ -589,7 +589,10 @@ const CompanyPage = () => {
                     <Star className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="font-semibold text-foreground">General Inquiries</h3>
-                  <p className="text-sm text-muted-foreground">hello@chamawallet.com</p>
+                  <div className="space-y-1">
+                    <p className="text-sm text-muted-foreground">nzaiharun28@gmail.com</p>
+                    <p className="text-sm text-muted-foreground">0705448355</p>
+                  </div>
                 </CardContent>
               </Card>
             </div>
