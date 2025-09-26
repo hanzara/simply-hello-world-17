@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'ChamaVault',
   webDir: 'dist',
   server: {
-    url: 'https://31a60196-5f10-4748-87c3-247b907cec13.lovableproject.com?forceHideBadge=true',
+    url: 'https://a953cf04-f9c6-46f9-9564-ba2ec64677f8.lovableproject.com?forceHideBadge=true',
     cleartext: true
   },
   plugins: {

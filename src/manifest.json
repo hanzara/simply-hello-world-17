@@ -5,12 +5,36 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#222222",
+  "theme_color": "#16a34a",
   "orientation": "portrait-primary",
   "scope": "/",
   "categories": ["finance", "productivity", "social"],
   "lang": "en",
   "dir": "ltr",
+  "screenshots": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "My Dashboard",
+      "short_name": "Dashboard",
+      "description": "Go to your dashboard",
+      "url": "/dashboard",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Join Chama",
+      "short_name": "Join",
+      "description": "Find and join a Chama",
+      "url": "/auth",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
   "icons": [
     {
       "src": "/icon-192.png",

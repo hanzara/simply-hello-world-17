@@ -413,15 +413,15 @@ const CompanyPage = () => {
         </div>
       </section>
 
-      {/* Team Section */}
+      {/* Security & Trust Section */}
       <section className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Meet Our Team
+              Security & Trust
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Experienced professionals dedicated to transforming African finance
+              Your money and data are protected by enterprise-grade security measures
             </p>
           </div>
           
@@ -429,7 +429,7 @@ const CompanyPage = () => {
             <div className="relative">
               <img 
                 src={teamWorkspaceImage} 
-                alt="Team workspace" 
+                alt="Secure financial workspace" 
                 className="rounded-2xl shadow-2xl w-full h-auto"
               />
               <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-primary/10 rounded-3xl blur-2xl -z-10"></div>
@@ -437,30 +437,85 @@ const CompanyPage = () => {
             
             <div className="space-y-6">
               <h3 className="text-2xl lg:text-3xl font-bold text-foreground">
-                Building the Future of Finance
+                Bank-Grade Security for Everyone
               </h3>
               <p className="text-lg text-muted-foreground">
-                Our diverse team combines deep financial expertise with cutting-edge technology 
-                to create solutions that truly serve African communities.
+                We use the same security standards as major banks to protect your financial data 
+                and ensure safe transactions across our platform.
               </p>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="h-6 w-6 text-primary flex-shrink-0" />
+                  <span className="text-foreground">256-bit SSL encryption for all data</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="h-6 w-6 text-primary flex-shrink-0" />
+                  <span className="text-foreground">Multi-factor authentication required</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="h-6 w-6 text-primary flex-shrink-0" />
+                  <span className="text-foreground">Regular security audits and monitoring</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="h-6 w-6 text-primary flex-shrink-0" />
+                  <span className="text-foreground">Fraud detection and prevention systems</span>
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, index) => (
-              <Card key={index} className="border-border bg-background/50 backdrop-blur-sm text-center">
-                <CardContent className="p-6 space-y-4">
-                  <div className="w-16 h-16 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full mx-auto flex items-center justify-center">
-                    <Users className="h-8 w-8 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground">{member.name}</h3>
-                    <p className="text-primary font-medium">{member.role}</p>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{member.bio}</p>
-                </CardContent>
-              </Card>
-            ))}
+            <Card className="border-border bg-background/50 backdrop-blur-sm text-center">
+              <CardContent className="p-6 space-y-4">
+                <div className="w-16 h-16 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full mx-auto flex items-center justify-center">
+                  <Shield className="h-8 w-8 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground">Data Protection</h3>
+                  <p className="text-primary font-medium">GDPR Compliant</p>
+                </div>
+                <p className="text-sm text-muted-foreground">Your personal data is encrypted and stored securely with full privacy protection</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border bg-background/50 backdrop-blur-sm text-center">
+              <CardContent className="p-6 space-y-4">
+                <div className="w-16 h-16 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full mx-auto flex items-center justify-center">
+                  <TrendingUp className="h-8 w-8 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground">Real-time Monitoring</h3>
+                  <p className="text-primary font-medium">24/7 Security</p>
+                </div>
+                <p className="text-sm text-muted-foreground">Continuous monitoring of all transactions and activities for suspicious behavior</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border bg-background/50 backdrop-blur-sm text-center">
+              <CardContent className="p-6 space-y-4">
+                <div className="w-16 h-16 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full mx-auto flex items-center justify-center">
+                  <Users className="h-8 w-8 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground">Trusted by Thousands</h3>
+                  <p className="text-primary font-medium">100+ Active Groups</p>
+                </div>
+                <p className="text-sm text-muted-foreground">Join a growing community of users who trust us with their financial future</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border bg-background/50 backdrop-blur-sm text-center">
+              <CardContent className="p-6 space-y-4">
+                <div className="w-16 h-16 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full mx-auto flex items-center justify-center">
+                  <Wallet className="h-8 w-8 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground">Secure Transactions</h3>
+                  <p className="text-primary font-medium">End-to-End Encryption</p>
+                </div>
+                <p className="text-sm text-muted-foreground">All financial transactions are protected with military-grade encryption</p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
