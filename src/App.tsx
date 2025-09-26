@@ -133,7 +133,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!user) {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
@@ -149,14 +149,14 @@ function App() {
           <BrowserRouter>
             <AuthProvider>
               <Routes>
-                <Route path="/company" element={<CompanyPage />} />
+                <Route path="/" element={<CompanyPage />} />
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/download" element={<AppDownloadPage />} />
                 <Route path="*" element={
                   <ProtectedRoute>
                     <AppLayout>
                       <Routes>
-                        <Route path="/" element={<Index />} />
+                        <Route path="/dashboard" element={<Index />} />
                         <Route path="/chamas" element={<ChamasPage />} />
                         <Route path="/available-chamas" element={<AvailableChamasPage />} />
                         <Route path="/chama/:id" element={<ChamaDetailPage />} />

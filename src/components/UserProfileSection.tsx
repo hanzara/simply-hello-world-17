@@ -31,11 +31,29 @@ const UserProfileSection = () => {
 
   return (
     <div className="flex items-center gap-4">
-      <span className="text-sm font-medium hidden md:block">Welcome, {displayName}</span>
+      <div className="flex items-center gap-3">
+        <div className="relative">
+          <Avatar className="h-10 w-10 ring-2 ring-primary/20">
+            {profilePhoto?.photo_url ? (
+              <AvatarImage src={profilePhoto.photo_url} alt="Profile" />
+            ) : (
+              <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
+                {displayName.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            )}
+          </Avatar>
+          {/* Online indicator */}
+          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-background"></div>
+        </div>
+        <div className="hidden md:block">
+          <p className="text-sm font-medium text-foreground">{displayName}</p>
+          <p className="text-xs text-muted-foreground">Online</p>
+        </div>
+      </div>
       
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <Button variant="ghost" className="relative h-8 w-8 rounded-full opacity-70 hover:opacity-100">
             <Avatar className="h-8 w-8">
               {profilePhoto?.photo_url ? (
                 <AvatarImage src={profilePhoto.photo_url} alt="Profile" />

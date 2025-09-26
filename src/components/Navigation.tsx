@@ -45,7 +45,7 @@ const Navigation = () => {
       id: 'home',
       label: 'Home',
       icon: Home,
-      path: '/',
+      path: '/dashboard',
       subtabs: []
     },
     {
@@ -128,7 +128,7 @@ const Navigation = () => {
             {/* Center: Brand Logo */}
             <div 
               className="font-bold text-xl bg-gradient-to-r from-kenyan-green to-kenyan-gold bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={() => navigate('/')}
+              onClick={() => navigate(user ? '/dashboard' : '/')}
             >
               ChamaVault
             </div>

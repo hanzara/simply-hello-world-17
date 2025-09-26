@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import ProfilePhotoUpload from '@/components/ProfilePhotoUpload';
+import GoogleAppleAuth from '@/components/GoogleAppleAuth';
 
 const AuthPage: React.FC = () => {
   const { signIn, signUp, loading, user } = useAuth();
@@ -45,7 +46,7 @@ const AuthPage: React.FC = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate('/dashboard');
     }
   }, [user, navigate]);
 
@@ -56,7 +57,7 @@ const AuthPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       await signIn(formData.email, formData.password);
-      navigate('/');
+      navigate('/dashboard');
     } catch (error: any) {
       toast({
         title: "Sign In Failed",
@@ -93,7 +94,7 @@ const AuthPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       await signUp(formData.email, formData.password, formData.fullName);
-      navigate('/');
+      navigate('/dashboard');
     } catch (error: any) {
       toast({
         title: "Sign Up Failed",
@@ -399,6 +400,10 @@ const AuthPage: React.FC = () => {
                   </form>
                 </TabsContent>
               </Tabs>
+
+              <div className="mt-6">
+                <GoogleAppleAuth />
+              </div>
 
               <div className="mt-6">
                 <Separator />
