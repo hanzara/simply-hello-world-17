@@ -150,6 +150,7 @@ function App() {
             <AuthProvider>
               <Routes>
                 <Route path="/" element={<CompanyPage />} />
+                <Route path="/company" element={<Navigate to="/" replace />} />
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/download" element={<AppDownloadPage />} />
                 <Route path="*" element={
