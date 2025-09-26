@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Users, Plus, Calendar, DollarSign, TrendingUp, PiggyBank, Smartphone, Award, BarChart3, Target, Sparkles, Globe, Settings, Building2, Star } from 'lucide-react';
 import CurrencyDisplay from '@/components/CurrencyDisplay';
+import FeaturesCarousel from '@/components/FeaturesCarousel';
 import { useNavigate } from 'react-router-dom';
 
 const Index = () => {
@@ -203,6 +204,9 @@ const Index = () => {
             </div>
           </div>
         </div>
+
+        {/* Features Carousel Section */}
+        <FeaturesCarousel />
 
         {/* Quick Actions */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-8">
