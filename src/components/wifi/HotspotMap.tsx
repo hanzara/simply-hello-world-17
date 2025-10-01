@@ -45,7 +45,7 @@ export function HotspotMap() {
       const response = await supabase
         .from('wifi_hotspots')
         .select('*')
-        .eq('is_active', true);
+        .eq('status', 'active');
 
       if (response.error) throw response.error;
 
