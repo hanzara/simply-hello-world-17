@@ -19,6 +19,13 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Use service role for admin operations
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+
+    // Use regular client for user authentication
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? ''
@@ -47,7 +54,7 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error('Invalid amount. Must be between 1 and 100,000');
     }
 
-    // Get or create buyer wallet
+    // Get or create buyer wallet - use admin client for write operations
     let { data: wallet, error: walletError } = await supabaseClient
       .from('buyer_wallets')
       .select('*')
@@ -55,8 +62,8 @@ const handler = async (req: Request): Promise<Response> => {
       .single();
 
     if (walletError && walletError.code === 'PGRST116') {
-      // Wallet doesn't exist, create it
-      const { data: newWallet, error: createError } = await supabaseClient
+      // Wallet doesn't exist, create it using admin client
+      const { data: newWallet, error: createError } = await supabaseAdmin
         .from('buyer_wallets')
         .insert([{ user_id: user.id }])
         .select()
@@ -72,8 +79,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     // For M-Pesa payment, initiate STK Push
     if (payment_method === 'mpesa' && phone_number) {
-      // Create M-Pesa transaction record
-      const { data: mpesaTransaction, error: mpesaError } = await supabaseClient
+      // Create M-Pesa transaction record using admin client
+      const { data: mpesaTransaction, error: mpesaError } = await supabaseAdmin
         .from('mpesa_transactions')
         .insert([{
           user_id: user.id,
@@ -106,8 +113,8 @@ const handler = async (req: Request): Promise<Response> => {
     // For other payment methods, process immediately (demo purposes)
     const newBalance = (wallet.balance || 0) + amount;
 
-    // Update wallet balance
-    const { error: updateError } = await supabaseClient
+    // Update wallet balance using admin client
+    const { error: updateError } = await supabaseAdmin
       .from('buyer_wallets')
       .update({
         balance: newBalance,
@@ -119,8 +126,8 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error(`Wallet update failed: ${updateError.message}`);
     }
 
-    // Record wallet transaction
-    const { error: transactionError } = await supabaseClient
+    // Record wallet transaction using admin client
+    const { error: transactionError } = await supabaseAdmin
       .from('wifi_wallet_transactions')
       .insert([{
         user_id: user.id,
