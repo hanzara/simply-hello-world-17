@@ -1,9 +1,10 @@
-import { useAuth } from '@/hooks/useAuth';
+import { useState } from 'react';
 import { SellerPortalDashboard } from '@/components/seller-portal/SellerPortalDashboard';
-import AuthPage from '@/pages/AuthPage';
+import { SellerLogin } from '@/components/seller-portal/SellerLogin';
+import { usePortalAuth } from '@/hooks/usePortalAuth';
 
 const PortalPage = () => {
-  const { user, loading } = useAuth();
+  const { portalUser, loading } = usePortalAuth();
 
   if (loading) {
     return (
@@ -16,8 +17,11 @@ const PortalPage = () => {
     );
   }
 
-  if (!user) {
-    return <AuthPage />;
+  if (!portalUser) {
+    return <SellerLogin onLoginSuccess={(userData) => {
+      // Login success is handled by the usePortalAuth hook
+      window.location.reload();
+    }} />;
   }
 
   return <SellerPortalDashboard />;

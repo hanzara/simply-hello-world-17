@@ -110,6 +110,56 @@ export const usePortalAuth = () => {
     }
   };
 
+  const authenticateWithCode = async (username: string, code: string) => {
+    setAuthenticating(true);
+    try {
+      const { data, error } = await supabase.rpc('authenticate_seller_with_code', {
+        p_username: username,
+        p_code: code.toUpperCase()
+      });
+
+      if (error) throw error;
+
+      const result = data as any;
+      if (result?.success) {
+        const user: PortalUser = {
+          id: result.user_id,
+          username: result.username,
+          access_level: result.access_level,
+          organization: result.organization,
+          session_token: result.session_token
+        };
+
+        setPortalUser(user);
+        localStorage.setItem('portal_session', result.session_token);
+
+        toast({
+          title: "Login Successful",
+          description: `Welcome, ${result.username}`,
+        });
+
+        return { success: true, user, requiresPasswordSetup: result.requires_password_setup };
+      } else {
+        toast({
+          title: "Authentication Failed",
+          description: result?.message || "Invalid code",
+          variant: "destructive",
+        });
+        return { success: false, message: result?.message };
+      }
+    } catch (error: any) {
+      console.error('Code authentication error:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to authenticate",
+        variant: "destructive",
+      });
+      return { success: false, message: error.message };
+    } finally {
+      setAuthenticating(false);
+    }
+  };
+
   const register = async (email: string, username: string, password: string, organization?: string) => {
     setAuthenticating(true);
     try {
@@ -175,6 +225,7 @@ export const usePortalAuth = () => {
     loading,
     authenticating,
     authenticate,
+    authenticateWithCode,
     register,
     logout,
     isAdmin,

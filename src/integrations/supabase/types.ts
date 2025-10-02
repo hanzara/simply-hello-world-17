@@ -4383,6 +4383,7 @@ export type Database = {
       portal_users: {
         Row: {
           access_level: string
+          code_expires_at: string | null
           created_at: string
           department: string | null
           email: string | null
@@ -4391,17 +4392,20 @@ export type Database = {
           last_login_at: string | null
           locked_until: string | null
           login_attempts: number | null
+          login_code: string | null
           organization: string | null
           password_hash: string | null
           password_salt: string | null
           password_set_at: string | null
           phone_number: string | null
+          requires_password_setup: boolean | null
           updated_at: string
           user_id: string | null
           username: string
         }
         Insert: {
           access_level?: string
+          code_expires_at?: string | null
           created_at?: string
           department?: string | null
           email?: string | null
@@ -4410,17 +4414,20 @@ export type Database = {
           last_login_at?: string | null
           locked_until?: string | null
           login_attempts?: number | null
+          login_code?: string | null
           organization?: string | null
           password_hash?: string | null
           password_salt?: string | null
           password_set_at?: string | null
           phone_number?: string | null
+          requires_password_setup?: boolean | null
           updated_at?: string
           user_id?: string | null
           username: string
         }
         Update: {
           access_level?: string
+          code_expires_at?: string | null
           created_at?: string
           department?: string | null
           email?: string | null
@@ -4429,11 +4436,13 @@ export type Database = {
           last_login_at?: string | null
           locked_until?: string | null
           login_attempts?: number | null
+          login_code?: string | null
           organization?: string | null
           password_hash?: string | null
           password_salt?: string | null
           password_set_at?: string | null
           phone_number?: string | null
+          requires_password_setup?: boolean | null
           updated_at?: string
           user_id?: string | null
           username?: string
@@ -6917,6 +6926,10 @@ export type Database = {
         Args: { p_email: string; p_password: string }
         Returns: Json
       }
+      authenticate_seller_with_code: {
+        Args: { p_code: string; p_username: string }
+        Returns: Json
+      }
       auto_approve_loan: {
         Args: { application_id: string }
         Returns: boolean
@@ -7028,6 +7041,10 @@ export type Database = {
       generate_repayment_schedule: {
         Args: { application_id: string }
         Returns: undefined
+      }
+      generate_seller_login_code: {
+        Args: { p_username: string }
+        Returns: Json
       }
       generate_voucher_code: {
         Args: Record<PropertyKey, never>
@@ -7261,6 +7278,14 @@ export type Database = {
           p_sender_id: string
         }
         Returns: string
+      }
+      set_seller_password: {
+        Args: {
+          p_new_password: string
+          p_session_token: string
+          p_username: string
+        }
+        Returns: Json
       }
       set_user_pin: {
         Args: { p_pin: string; p_user_id: string }
