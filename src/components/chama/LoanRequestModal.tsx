@@ -5,10 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, CreditCard } from 'lucide-react';
+import { Loader2, CreditCard, TrendingUp } from 'lucide-react';
 import { useChamaLoans } from '@/hooks/useChamaLoans';
-import CurrencyDisplay from '@/components/CurrencyDisplay';
-import MpesaPaymentModal from '@/components/shared/MpesaPaymentModal';
+import { Progress } from '@/components/ui/progress';
 
 interface LoanRequestModalProps {
   isOpen: boolean;
@@ -26,36 +25,45 @@ const LoanRequestModal: React.FC<LoanRequestModalProps> = ({
   const [amount, setAmount] = useState('');
   const [purpose, setPurpose] = useState('');
   const [repaymentPeriod, setRepaymentPeriod] = useState('6');
-  const [collateral, setCollateral] = useState('');
-  const [showMpesaModal, setShowMpesaModal] = useState(false);
   
-  const { applyForLoan, isApplying } = useChamaLoans(chamaId);
+  const { applyForLoan, isApplying, creditScore } = useChamaLoans(chamaId);
+
+  const score = creditScore?.credit_score || 30;
+  const maxLoanAmount = 100000; // Default, can be from chama settings
+  const eligibleAmount = Math.min(maxLoanAmount, (score / 100) * maxLoanAmount);
 
   const handleSubmit = async () => {
     if (!amount || !purpose) return;
 
     const loanAmount = parseFloat(amount);
     
+    if (loanAmount > eligibleAmount) {
+      return;
+    }
+    
     try {
       await applyForLoan({
         amount: loanAmount,
         purpose,
-        repaymentPeriodMonths: parseInt(repaymentPeriod),
-        collateral
+        repaymentPeriodMonths: parseInt(repaymentPeriod)
       });
       
       // Reset form
       setAmount('');
       setPurpose('');
       setRepaymentPeriod('6');
-      setCollateral('');
       onClose();
     } catch (error) {
       console.error('Loan application failed:', error);
     }
   };
 
-  const processingFee = parseFloat(amount) * 0.015; // 1.5% processing fee (updated from backend)
+  const getCreditScoreLabel = () => {
+    if (score >= 80) return '💪 Excellent';
+    if (score >= 60) return '⭐ Good';
+    if (score >= 40) return '👍 Fair';
+    return '⚠️ Building';
+  };
 
   return (
     <>
@@ -63,38 +71,55 @@ const LoanRequestModal: React.FC<LoanRequestModalProps> = ({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5 text-blue-600" />
-              Apply for Loan
+              <CreditCard className="h-5 w-5" />
+              Request Chama Loan
             </DialogTitle>
             <DialogDescription>
-              Request a loan from {chamaData?.name}
+              Apply for a loan from {chamaData?.name}
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4">
+            {/* Credit Score Display */}
+            <div className="bg-muted p-4 rounded-lg">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-medium">Your Credit Score</span>
+                <span className="text-lg font-bold">{getCreditScoreLabel()}</span>
+              </div>
+              <Progress value={score} className="h-2 mb-2" />
+              <p className="text-xs text-muted-foreground">
+                Score: {score}/100
+              </p>
+            </div>
+
+            {/* Eligible Amount */}
+            <div className="bg-primary/10 p-3 rounded-lg">
+              <p className="text-sm text-muted-foreground">Eligible Loan Amount</p>
+              <p className="text-xl font-bold text-primary">
+                Up to KES {eligibleAmount.toLocaleString()}
+              </p>
+            </div>
+
+            {/* Amount Input */}
             <div className="space-y-2">
               <Label htmlFor="amount">Loan Amount (KES)</Label>
               <Input
                 id="amount"
                 type="number"
-                placeholder="10000"
+                placeholder="Enter amount"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
+                max={eligibleAmount}
                 disabled={isApplying}
               />
+              {parseFloat(amount) > eligibleAmount && (
+                <p className="text-xs text-destructive">
+                  Amount exceeds your eligible limit
+                </p>
+              )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="purpose">Purpose</Label>
-              <Textarea
-                id="purpose"
-                placeholder="Describe what you need the loan for..."
-                value={purpose}
-                onChange={(e) => setPurpose(e.target.value)}
-                disabled={isApplying}
-              />
-            </div>
-
+            {/* Duration */}
             <div className="space-y-2">
               <Label htmlFor="period">Repayment Period</Label>
               <Select value={repaymentPeriod} onValueChange={setRepaymentPeriod}>
@@ -102,94 +127,50 @@ const LoanRequestModal: React.FC<LoanRequestModalProps> = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="3">3 months</SelectItem>
-                  <SelectItem value="6">6 months</SelectItem>
-                  <SelectItem value="9">9 months</SelectItem>
-                  <SelectItem value="12">12 months</SelectItem>
+                  <SelectItem value="3">3 Months</SelectItem>
+                  <SelectItem value="6">6 Months</SelectItem>
+                  <SelectItem value="9">9 Months</SelectItem>
+                  <SelectItem value="12">12 Months</SelectItem>
+                  <SelectItem value="18">18 Months</SelectItem>
+                  <SelectItem value="24">24 Months</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
+            {/* Purpose */}
             <div className="space-y-2">
-              <Label htmlFor="collateral">Collateral (Optional)</Label>
+              <Label htmlFor="purpose">Loan Purpose</Label>
               <Textarea
-                id="collateral"
-                placeholder="Describe any collateral you can provide..."
-                value={collateral}
-                onChange={(e) => setCollateral(e.target.value)}
+                id="purpose"
+                placeholder="Explain why you need this loan..."
+                value={purpose}
+                onChange={(e) => setPurpose(e.target.value)}
+                rows={3}
                 disabled={isApplying}
               />
             </div>
-
-            {amount && (
-              <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                <p className="text-sm font-medium text-blue-800 mb-2">Loan Summary:</p>
-                <div className="space-y-1 text-sm text-blue-700">
-                  <div className="flex justify-between">
-                    <span>Loan Amount:</span>
-                    <CurrencyDisplay amount={parseFloat(amount) || 0} showToggle={false} />
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Processing Fee (2%):</span>
-                    <CurrencyDisplay amount={processingFee || 0} showToggle={false} />
-                  </div>
-                  <div className="flex justify-between font-medium">
-                    <span>You'll Receive:</span>
-                    <CurrencyDisplay amount={(parseFloat(amount) || 0) - processingFee} showToggle={false} />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {processingFee > 0 && (
-              <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                <p className="text-sm text-yellow-800">
-                  <strong>Processing Fee Required:</strong> Pay the processing fee via M-Pesa to submit your loan application.
-                </p>
-              </div>
-            )}
           </div>
 
           <DialogFooter className="flex gap-2">
             <Button variant="outline" onClick={onClose} disabled={isApplying}>
               Cancel
             </Button>
-            {processingFee > 0 ? (
-              <Button 
-                onClick={() => setShowMpesaModal(true)}
-                disabled={!amount || !purpose || isApplying}
-                className="bg-green-600 hover:bg-green-700"
-              >
-                Pay Processing Fee
-              </Button>
-            ) : (
-              <Button 
-                onClick={handleSubmit}
-                disabled={!amount || !purpose || isApplying}
-              >
-                {isApplying ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Applying...
-                  </>
-                ) : (
-                  'Submit Application'
-                )}
-              </Button>
-            )}
+            <Button 
+              onClick={handleSubmit}
+              disabled={!amount || !purpose || parseFloat(amount) > eligibleAmount || isApplying}
+            >
+              {isApplying ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Applying...
+                </>
+              ) : (
+                'Submit Application'
+              )}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      <MpesaPaymentModal
-        isOpen={showMpesaModal}
-        onClose={() => setShowMpesaModal(false)}
-        amount={processingFee}
-        description={`Loan processing fee for ${chamaData?.name}`}
-        purpose="loan_payment"
-        chamaId={chamaId}
-        onSuccess={handleSubmit}
-      />
     </>
   );
 };
