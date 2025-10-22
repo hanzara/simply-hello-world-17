@@ -23,6 +23,7 @@ export const useStuckPaymentReconciliation = () => {
         .eq('user_id', user.id)
         .in('transaction_type', ['paystack', 'airtel_money'])
         .eq('status', 'pending')
+        .is('chama_id', null)
         .lt('created_at', fiveMinutesAgo);
 
       if (error) throw error;

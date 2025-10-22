@@ -20,8 +20,9 @@ serve(async (req) => {
     
     console.log('Manually crediting payment for reference:', reference, 'or ID:', transaction_id);
 
-    // Get transaction details - try by ID first, then by checkout_request_id
-    let transaction, txError;
+    // Get transaction details - try by ID first, then by checkout_request_id (latest if multiple)
+    let transaction: any | null = null;
+    let txError: any = null;
     
     if (transaction_id) {
       const result = await supabase
@@ -36,13 +37,30 @@ serve(async (req) => {
         .from('mpesa_transactions')
         .select('*')
         .eq('checkout_request_id', reference)
-        .single();
-      transaction = result.data;
+        .order('created_at', { ascending: false })
+        .limit(1);
+      transaction = (result.data && Array.isArray(result.data)) ? result.data[0] : null;
       txError = result.error;
     }
 
     if (txError || !transaction) {
       throw new Error('Transaction not found');
+    }
+
+    // Only credit wallet topups
+    if (transaction.purpose !== 'wallet_topup') {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Not a wallet top-up transaction' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+      );
+    }
+
+    // Prevent double-crediting
+    if (transaction.status === 'success') {
+      return new Response(
+        JSON.stringify({ success: true, message: 'Payment already processed' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     const amount = transaction.amount;
