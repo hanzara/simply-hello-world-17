@@ -16,16 +16,30 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { reference } = await req.json();
+    const { reference, transaction_id } = await req.json();
     
-    console.log('Manually crediting payment for reference:', reference);
+    console.log('Manually crediting payment for reference:', reference, 'or ID:', transaction_id);
 
-    // Get transaction details
-    const { data: transaction, error: txError } = await supabase
-      .from('mpesa_transactions')
-      .select('*')
-      .eq('checkout_request_id', reference)
-      .single();
+    // Get transaction details - try by ID first, then by checkout_request_id
+    let transaction, txError;
+    
+    if (transaction_id) {
+      const result = await supabase
+        .from('mpesa_transactions')
+        .select('*')
+        .eq('id', transaction_id)
+        .single();
+      transaction = result.data;
+      txError = result.error;
+    } else if (reference) {
+      const result = await supabase
+        .from('mpesa_transactions')
+        .select('*')
+        .eq('checkout_request_id', reference)
+        .single();
+      transaction = result.data;
+      txError = result.error;
+    }
 
     if (txError || !transaction) {
       throw new Error('Transaction not found');
@@ -72,6 +86,10 @@ serve(async (req) => {
       throw walletUpdateError;
     }
 
+    // Determine payment method and reference
+    const paymentMethod = transaction.transaction_type === 'airtel_money' ? 'airtel_money' : 'paystack';
+    const paymentReference = reference || transaction_id || transaction.id;
+
     // Record wallet transaction
     await supabase
       .from('wallet_transactions')
@@ -79,24 +97,25 @@ serve(async (req) => {
         user_id: transaction.user_id,
         type: 'deposit',
         amount: netAmount,
-        description: `Wallet top-up via Paystack (Fee: KES ${platformFee.toFixed(2)})`,
+        description: `Wallet top-up via ${paymentMethod === 'airtel_money' ? 'Airtel Money' : 'Paystack'} (Fee: KES ${platformFee.toFixed(2)})`,
         status: 'completed',
-        reference_id: reference,
-        payment_method: 'paystack'
+        reference_id: paymentReference,
+        payment_method: paymentMethod,
+        currency: 'KES'
       });
 
-    // Update transaction status
+    // Update transaction status by ID
     await supabase
       .from('mpesa_transactions')
       .update({
         status: 'success',
         result_code: 0,
         result_desc: 'Payment verified and credited manually',
-        mpesa_receipt_number: reference,
+        mpesa_receipt_number: paymentReference,
         transaction_date: new Date().toISOString(),
         updated_at: new Date().toISOString()
       })
-      .eq('checkout_request_id', reference);
+      .eq('id', transaction.id);
 
     console.log('Payment credited successfully:', {
       userId: transaction.user_id,

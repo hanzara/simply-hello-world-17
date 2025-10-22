@@ -9,7 +9,7 @@ export const useStuckPaymentReconciliation = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Check for stuck Paystack payments (pending for >5 minutes)
+  // Check for stuck payments (Paystack & Airtel Money - pending for >5 minutes)
   const { data: stuckPayments } = useQuery({
     queryKey: ['stuck-payments', user?.id],
     queryFn: async () => {
@@ -21,7 +21,7 @@ export const useStuckPaymentReconciliation = () => {
         .from('mpesa_transactions')
         .select('*')
         .eq('user_id', user.id)
-        .eq('transaction_type', 'paystack')
+        .in('transaction_type', ['paystack', 'airtel_money'])
         .eq('status', 'pending')
         .lt('created_at', fiveMinutesAgo);
 
@@ -39,12 +39,17 @@ export const useStuckPaymentReconciliation = () => {
     const creditStuckPayments = async () => {
       for (const payment of stuckPayments) {
         try {
+          // For Airtel Money, use transaction_id; for Paystack, use checkout_request_id
+          const requestBody = payment.transaction_type === 'airtel_money' 
+            ? { transaction_id: payment.id }
+            : { reference: payment.checkout_request_id };
+
           const { data, error } = await supabase.functions.invoke('manual-credit-payment', {
-            body: { reference: payment.checkout_request_id }
+            body: requestBody
           });
 
           if (error) {
-            console.error('Failed to credit payment:', payment.checkout_request_id, error);
+            console.error('Failed to credit payment:', payment.id, error);
             continue;
           }
 
@@ -57,6 +62,8 @@ export const useStuckPaymentReconciliation = () => {
             // Invalidate queries to refresh wallet balance
             await queryClient.invalidateQueries({ queryKey: ['user-wallets'] });
             await queryClient.invalidateQueries({ queryKey: ['stuck-payments'] });
+            await queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+            await queryClient.invalidateQueries({ queryKey: ['central-wallet'] });
           }
         } catch (err) {
           console.error('Error crediting stuck payment:', err);
