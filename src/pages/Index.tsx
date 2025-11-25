@@ -56,8 +56,8 @@ const ChainFlowMobile = () => {
   };
 
   const renderStatusBar = () => (
-    <div className="bg-indigo-600 px-2 sm:px-4 pt-3 pb-2">
-      <div className="flex items-center justify-between text-white text-xs">
+    <div className="bg-indigo-600 px-3 sm:px-4 md:px-6 pt-3 pb-2">
+      <div className="flex items-center justify-between text-white text-xs sm:text-sm">
         <span>9:41</span>
         <div className="flex items-center gap-1">
           <div className="w-4 h-3 border border-white rounded-sm"></div>
@@ -68,57 +68,57 @@ const ChainFlowMobile = () => {
   );
 
   const renderHeader = (title: string, showBack = false) => (
-    <div className="bg-indigo-600 px-2 sm:px-4 py-4 text-white">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
+    <div className="bg-indigo-600 px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-white">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button 
             onClick={() => setMenuOpen(!menuOpen)} 
-            className="p-2 hover:bg-indigo-700 rounded-lg active:scale-95 transition-transform"
+            className="p-1.5 sm:p-2 hover:bg-indigo-700 rounded-lg active:scale-95 transition-transform"
           >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            {menuOpen ? <X size={20} className="sm:w-6 sm:h-6" /> : <Menu size={20} className="sm:w-6 sm:h-6" />}
           </button>
           {showBack && (
-            <button onClick={goBack} className="p-2 hover:bg-indigo-700 rounded-lg active:scale-95 transition-transform">
-              <ArrowLeft size={24} />
+            <button onClick={goBack} className="p-1.5 sm:p-2 hover:bg-indigo-700 rounded-lg active:scale-95 transition-transform">
+              <ArrowLeft size={20} className="sm:w-6 sm:h-6" />
             </button>
           )}
           {!showBack && (
             <div>
-              <div className="text-xs opacity-80">Welcome back</div>
-              <div className="text-lg font-bold">{title}</div>
+              <div className="text-xs sm:text-sm opacity-80">Welcome back</div>
+              <div className="text-base sm:text-lg md:text-xl font-bold">{title}</div>
             </div>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <button 
             onClick={() => setNotificationOpen(!notificationOpen)}
-            className="relative p-2 hover:bg-indigo-700 rounded-lg active:scale-95 transition-transform"
+            className="relative p-1.5 sm:p-2 hover:bg-indigo-700 rounded-lg active:scale-95 transition-transform"
           >
-            <Bell size={22} />
+            <Bell size={18} className="sm:w-5 sm:h-5" />
             {notifications.length > 0 && (
-              <span className="absolute top-0 right-0 w-5 h-5 bg-red-500 text-xs rounded-full flex items-center justify-center font-bold">
+              <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-[10px] sm:text-xs rounded-full flex items-center justify-center font-bold">
                 {notifications.length}
               </span>
             )}
           </button>
-          <div className="w-10 h-10 bg-indigo-700 rounded-full flex items-center justify-center font-bold text-sm">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-700 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm">
             JD
           </div>
         </div>
       </div>
       {!showBack && currentTab === 'home' && (
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-5">
-          <div className="text-sm opacity-80 mb-1">Total Balance</div>
-          <div className="text-3xl font-bold">$50,000.00</div>
-          <div className="text-sm mt-2">USD</div>
+        <div className="bg-white/10 backdrop-blur-lg rounded-xl sm:rounded-2xl p-4 sm:p-5">
+          <div className="text-xs sm:text-sm opacity-80 mb-1">Total Balance</div>
+          <div className="text-2xl sm:text-3xl md:text-4xl font-bold">$50,000.00</div>
+          <div className="text-xs sm:text-sm mt-1 sm:mt-2">USD</div>
         </div>
       )}
     </div>
   );
 
   const renderBottomNav = () => (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-3 shadow-2xl z-40">
-      <div className="flex items-center justify-start gap-2 px-2 sm:px-4">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-2 sm:py-3 shadow-2xl z-40 safe-area-bottom">
+      <div className="flex items-center justify-around px-2 sm:px-4 md:px-6 max-w-2xl mx-auto">
         {[
           { icon: Home, label: 'Home', tab: 'home' },
           { icon: Send, label: 'Payments', tab: 'payments' },
@@ -136,10 +136,10 @@ const ChainFlowMobile = () => {
                 setMenuOpen(false);
                 setNotificationOpen(false);
               }}
-              className={`flex-1 flex flex-col items-center gap-1 py-2 transition-all active:scale-95 ${isActive ? 'text-indigo-600' : 'text-gray-500'}`}
+              className={`flex flex-col items-center gap-0.5 sm:gap-1 py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg transition-all active:scale-95 ${isActive ? 'text-indigo-600 bg-indigo-50' : 'text-gray-500'}`}
             >
-              <Icon size={22} />
-              <span className="text-xs font-medium">{nav.label}</span>
+              <Icon size={20} className="sm:w-6 sm:h-6" />
+              <span className="text-[10px] sm:text-xs font-medium">{nav.label}</span>
             </button>
           );
         })}
@@ -151,27 +151,27 @@ const ChainFlowMobile = () => {
   const renderHomeScreen = () => (
     <>
       {/* Key Metrics Section */}
-      <div className="px-2 sm:px-4 -mt-6 mb-6">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-card rounded-xl shadow-sm p-4 border border-border">
-            <div className="text-xs text-muted-foreground font-medium mb-1">Total Volume</div>
-            <div className="text-2xl font-bold text-foreground">$2.5M</div>
-            <div className="text-xs text-green-600 mt-1">+15% vs last mo</div>
+      <div className="px-3 sm:px-4 md:px-6 -mt-4 sm:-mt-6 mb-4 sm:mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+          <div className="bg-card rounded-lg sm:rounded-xl shadow-sm p-3 sm:p-4 border border-border">
+            <div className="text-[10px] sm:text-xs text-muted-foreground font-medium mb-0.5 sm:mb-1">Total Volume</div>
+            <div className="text-lg sm:text-2xl font-bold text-foreground">$2.5M</div>
+            <div className="text-[10px] sm:text-xs text-green-600 mt-0.5 sm:mt-1">+15% vs last mo</div>
           </div>
-          <div className="bg-card rounded-xl shadow-sm p-4 border border-border">
-            <div className="text-xs text-muted-foreground font-medium mb-1">Total Fees Saved</div>
-            <div className="text-2xl font-bold text-foreground">$75,000</div>
-            <div className="text-xs text-muted-foreground mt-1">vs traditional</div>
+          <div className="bg-card rounded-lg sm:rounded-xl shadow-sm p-3 sm:p-4 border border-border">
+            <div className="text-[10px] sm:text-xs text-muted-foreground font-medium mb-0.5 sm:mb-1">Total Fees Saved</div>
+            <div className="text-lg sm:text-2xl font-bold text-foreground">$75,000</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">vs traditional</div>
           </div>
-          <div className="bg-card rounded-xl shadow-sm p-4 border border-border">
-            <div className="text-xs text-muted-foreground font-medium mb-1">Success Rate</div>
-            <div className="text-2xl font-bold text-foreground">99.8%</div>
-            <div className="text-xs text-green-600 mt-1">↑ 0.2%</div>
+          <div className="bg-card rounded-lg sm:rounded-xl shadow-sm p-3 sm:p-4 border border-border">
+            <div className="text-[10px] sm:text-xs text-muted-foreground font-medium mb-0.5 sm:mb-1">Success Rate</div>
+            <div className="text-lg sm:text-2xl font-bold text-foreground">99.8%</div>
+            <div className="text-[10px] sm:text-xs text-green-600 mt-0.5 sm:mt-1">↑ 0.2%</div>
           </div>
-          <div className="bg-card rounded-xl shadow-sm p-4 border border-border">
-            <div className="text-xs text-muted-foreground font-medium mb-1">Active Customers</div>
-            <div className="text-2xl font-bold text-foreground">1,247</div>
-            <div className="text-xs text-green-600 mt-1">+89 this month</div>
+          <div className="bg-card rounded-lg sm:rounded-xl shadow-sm p-3 sm:p-4 border border-border">
+            <div className="text-[10px] sm:text-xs text-muted-foreground font-medium mb-0.5 sm:mb-1">Active Customers</div>
+            <div className="text-lg sm:text-2xl font-bold text-foreground">1,247</div>
+            <div className="text-[10px] sm:text-xs text-green-600 mt-0.5 sm:mt-1">+89 this month</div>
           </div>
         </div>
       </div>
@@ -224,47 +224,47 @@ const ChainFlowMobile = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="px-2 sm:px-4 mb-6">
-        <div className="grid grid-cols-2 gap-3">
+      <div className="px-3 sm:px-4 md:px-6 mb-4 sm:mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
           <button 
             onClick={() => setCurrentScreen('send')}
-            className="bg-card rounded-xl shadow-sm border border-border p-4 active:scale-95 transition-transform"
+            className="bg-card rounded-lg sm:rounded-xl shadow-sm border border-border p-3 sm:p-4 active:scale-95 transition-transform hover:border-indigo-300"
           >
-            <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-2">
-              <Send className="text-indigo-600" size={20} />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-1.5 sm:mb-2">
+              <Send className="text-indigo-600" size={18} />
             </div>
-            <div className="text-sm font-semibold text-foreground">💸 Send Money</div>
-            <div className="text-xs text-muted-foreground mt-1">Send to anyone</div>
+            <div className="text-xs sm:text-sm font-semibold text-foreground">💸 Send Money</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">Send to anyone</div>
           </button>
           <button 
             onClick={() => setCurrentScreen('bulk')}
-            className="bg-card rounded-xl shadow-sm border border-border p-4 active:scale-95 transition-transform"
+            className="bg-card rounded-lg sm:rounded-xl shadow-sm border border-border p-3 sm:p-4 active:scale-95 transition-transform hover:border-green-300"
           >
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-              <Users className="text-green-600" size={20} />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-1.5 sm:mb-2">
+              <Users className="text-green-600" size={18} />
             </div>
-            <div className="text-sm font-semibold text-foreground">📊 Disburse Bulk</div>
-            <div className="text-xs text-muted-foreground mt-1">Pay multiple</div>
+            <div className="text-xs sm:text-sm font-semibold text-foreground">📊 Disburse Bulk</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">Pay multiple</div>
           </button>
           <button 
             onClick={() => setCurrentScreen('payment-link')}
-            className="bg-card rounded-xl shadow-sm border border-border p-4 active:scale-95 transition-transform"
+            className="bg-card rounded-lg sm:rounded-xl shadow-sm border border-border p-3 sm:p-4 active:scale-95 transition-transform hover:border-purple-300"
           >
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
-              <Link className="text-purple-600" size={20} />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-1.5 sm:mb-2">
+              <Link className="text-purple-600" size={18} />
             </div>
-            <div className="text-sm font-semibold text-foreground">🔗 Create Link</div>
-            <div className="text-xs text-muted-foreground mt-1">Get paid online</div>
+            <div className="text-xs sm:text-sm font-semibold text-foreground">🔗 Create Link</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">Get paid online</div>
           </button>
           <button 
             onClick={() => setCurrentScreen('scan')}
-            className="bg-card rounded-xl shadow-sm border border-border p-4 active:scale-95 transition-transform"
+            className="bg-card rounded-lg sm:rounded-xl shadow-sm border border-border p-3 sm:p-4 active:scale-95 transition-transform hover:border-orange-300"
           >
-            <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
-              <QrCode className="text-orange-600" size={20} />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-1.5 sm:mb-2">
+              <QrCode className="text-orange-600" size={18} />
             </div>
-            <div className="text-sm font-semibold text-foreground">📷 Scan QR</div>
-            <div className="text-xs text-muted-foreground mt-1">Quick payment</div>
+            <div className="text-xs sm:text-sm font-semibold text-foreground">📷 Scan QR</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">Quick payment</div>
           </button>
         </div>
       </div>
@@ -302,8 +302,8 @@ const ChainFlowMobile = () => {
 
   // PAYMENTS SCREEN
   const renderPaymentsScreen = () => (
-    <div className="px-2 sm:px-4 py-6 pb-24">
-      <h2 className="text-2xl font-bold mb-6">Payment Options</h2>
+    <div className="px-3 sm:px-4 md:px-6 py-4 sm:py-6 pb-20 sm:pb-24">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6">Payment Options</h2>
       <div className="space-y-3">
         {[
           { icon: Send, title: 'Send Money', desc: 'Transfer to anyone globally', screen: 'send' },
@@ -337,10 +337,10 @@ const ChainFlowMobile = () => {
 
   // ANALYTICS SCREEN
   const renderAnalyticsScreen = () => (
-    <div className="px-2 sm:px-4 py-6 pb-24">
-      <h2 className="text-2xl font-bold mb-6">Analytics Dashboard</h2>
+    <div className="px-3 sm:px-4 md:px-6 py-4 sm:py-6 pb-20 sm:pb-24">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6">Analytics Dashboard</h2>
       
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
         {[
           { label: 'Total Volume', value: '$2.5M', change: '+15%', icon: TrendingUp, color: 'text-green-500' },
           { label: 'Fees Saved', value: '$75K', change: 'vs trad.', icon: DollarSign, color: 'text-blue-500' },
@@ -994,13 +994,13 @@ const ChainFlowMobile = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="h-screen w-full">
+      <div className="h-screen w-full max-w-md lg:max-w-2xl mx-auto">
         
         {/* Mobile Phone Frame */}
-        <div className="relative bg-white h-full overflow-hidden">
+        <div className="relative bg-white h-full overflow-hidden sm:rounded-3xl sm:shadow-2xl">
           
           {/* Screen Content */}
-          <div className="h-full overflow-y-auto">
+          <div className="h-full overflow-y-auto pb-safe">
             {renderScreen()}
           </div>
 
@@ -1012,20 +1012,6 @@ const ChainFlowMobile = () => {
 
           {/* Notifications Overlay */}
           {notificationOpen && renderNotifications()}
-        </div>
-
-        {/* Navigation Indicator */}
-        <div className="mt-6 text-center">
-          <div className="mt-3 space-y-1">
-            <p className="text-sm font-semibold text-indigo-600">
-              Current: {currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} Tab
-            </p>
-            {currentScreen !== 'main' && (
-              <p className="text-xs text-gray-600">
-                Screen: {currentScreen.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-              </p>
-            )}
-          </div>
         </div>
       </div>
     </div>
