@@ -225,7 +225,7 @@ const ChainFlowMobile = () => {
 
       {/* Quick Actions */}
       <div className="px-2 sm:px-4 mb-6">
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           <button 
             onClick={() => setCurrentScreen('send')}
             className="bg-card rounded-xl shadow-sm border border-border p-4 active:scale-95 transition-transform"
@@ -255,6 +255,16 @@ const ChainFlowMobile = () => {
             </div>
             <div className="text-sm font-semibold text-foreground">🔗 Create Link</div>
             <div className="text-xs text-muted-foreground mt-1">Get paid online</div>
+          </button>
+          <button 
+            onClick={() => setCurrentScreen('scan')}
+            className="bg-card rounded-xl shadow-sm border border-border p-4 active:scale-95 transition-transform"
+          >
+            <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
+              <QrCode className="text-orange-600" size={20} />
+            </div>
+            <div className="text-sm font-semibold text-foreground">📷 Scan QR</div>
+            <div className="text-xs text-muted-foreground mt-1">Quick payment</div>
           </button>
         </div>
       </div>
