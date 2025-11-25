@@ -399,8 +399,8 @@ const ChainFlowMobile = () => {
             JD
           </div>
           <div>
-            <div className="text-xl font-bold">John Doe</div>
-            <div className="text-sm opacity-80">john@acme.com</div>
+            <div className="text-xl font-bold">Harun Nzai</div>
+            <div className="text-sm opacity-80">nzaiharun28@gmail.com</div>
           </div>
         </div>
         <div className="flex gap-4">
