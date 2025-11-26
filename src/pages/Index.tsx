@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Home, Send, TrendingUp, Settings, User, Bell, Plus, QrCode, History, CreditCard, Link, Users, BarChart3, DollarSign, Clock, CheckCircle, ArrowLeft, Search, HelpCircle, Code, Shield, Phone, MessageCircle, ChevronRight, Menu, X, Wallet, FileText, AlertCircle, Key, Webhook, BookOpen, Zap } from 'lucide-react';
+import BulkPayoutUI from '@/components/BulkPayoutUI';
 
 const ChainFlowMobile = () => {
   const [currentTab, setCurrentTab] = useState('home');
@@ -838,13 +839,7 @@ const ChainFlowMobile = () => {
         );
       
       case 'bulk':
-        return (
-          <>
-            {renderStatusBar()}
-            {renderHeader('Bulk Payout', true)}
-            {renderDetailScreen('Bulk Payout', 'Upload a CSV file or enter multiple recipients to send payments in bulk.')}
-          </>
-        );
+        return <BulkPayoutUI onBack={() => setCurrentScreen('main')} />;
       
       case 'payment-link':
         return (
