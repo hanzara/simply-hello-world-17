@@ -794,7 +794,7 @@ const ChainFlowMobile = () => {
         return (
           <>
             {renderStatusBar()}
-            {renderHeader('John Doe')}
+            {renderHeader('Harun')}
             {currentTab === 'home' && renderHomeScreen()}
             {currentTab === 'payments' && renderPaymentsScreen()}
             {currentTab === 'analytics' && renderAnalyticsScreen()}
