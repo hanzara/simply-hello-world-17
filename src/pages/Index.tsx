@@ -103,7 +103,7 @@ const ChainFlowMobile = () => {
             )}
           </button>
           <div className="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-700 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm">
-            JD
+            HR
           </div>
         </div>
       </div>
