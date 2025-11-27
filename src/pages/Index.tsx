@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Home, Send, TrendingUp, Settings, User, Bell, Plus, QrCode, History, CreditCard, Link, Users, BarChart3, DollarSign, Clock, CheckCircle, ArrowLeft, Search, HelpCircle, Code, Shield, Phone, MessageCircle, ChevronRight, Menu, X, Wallet, FileText, AlertCircle, Key, Webhook, BookOpen, Zap } from 'lucide-react';
 import BulkPayoutUI from '@/components/BulkPayoutUI';
+import PaymentLinkUI from '@/components/PaymentLinkUI';
 
 const ChainFlowMobile = () => {
   const [currentTab, setCurrentTab] = useState('home');
@@ -842,13 +843,7 @@ const ChainFlowMobile = () => {
         return <BulkPayoutUI onBack={() => setCurrentScreen('main')} />;
       
       case 'payment-link':
-        return (
-          <>
-            {renderStatusBar()}
-            {renderHeader('Payment Link', true)}
-            {renderDetailScreen('Create Payment Link', 'Generate a shareable link to receive payments from anyone.')}
-          </>
-        );
+        return <PaymentLinkUI onBack={() => setCurrentScreen('main')} />;
       
       case 'subscriptions':
         return (
