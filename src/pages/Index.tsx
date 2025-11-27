@@ -8,6 +8,7 @@ const ChainFlowMobile = () => {
   const [currentScreen, setCurrentScreen] = useState('main');
   const [menuOpen, setMenuOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [readNotifications, setReadNotifications] = useState<number[]>([]);
   
   // Form states
   const [sendAmount, setSendAmount] = useState('5000');
@@ -27,6 +28,18 @@ const ChainFlowMobile = () => {
     { type: 'warning', title: 'Bulk payout attention', desc: '3 out of 250 payments failed', time: '1 hour ago', id: 2 },
     { type: 'info', title: 'Funds received', desc: '$2,500 USD received via bank transfer', time: '3 hours ago', id: 3 }
   ];
+
+  const unreadCount = notifications.filter(n => !readNotifications.includes(n.id)).length;
+
+  const markAsRead = (id: number) => {
+    if (!readNotifications.includes(id)) {
+      setReadNotifications(prev => [...prev, id]);
+    }
+  };
+
+  const markAllAsRead = () => {
+    setReadNotifications(notifications.map(n => n.id));
+  };
 
   const transactions = [
     { id: 1, amount: '$5,000', to: 'KES', recipient: '+254712***678', status: 'Completed', date: 'Nov 22, 3:45 PM', color: 'green' },
@@ -94,12 +107,12 @@ const ChainFlowMobile = () => {
         <div className="flex items-center gap-1 sm:gap-2">
           <button 
             onClick={() => setNotificationOpen(!notificationOpen)}
-            className="relative p-1.5 sm:p-2 hover:bg-indigo-700 rounded-lg active:scale-95 transition-transform"
+            className="relative p-1.5 sm:p-2 hover:bg-indigo-700 rounded-lg active:scale-95 transition-all"
           >
             <Bell size={18} className="sm:w-5 sm:h-5" />
-            {notifications.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-[10px] sm:text-xs rounded-full flex items-center justify-center font-bold">
-                {notifications.length}
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-[10px] sm:text-xs rounded-full flex items-center justify-center font-bold animate-pulse">
+                {unreadCount}
               </span>
             )}
           </button>
@@ -649,40 +662,123 @@ const ChainFlowMobile = () => {
 
   // NOTIFICATIONS PANEL
   const renderNotifications = () => (
-    <div className="fixed inset-0 bg-black/50 z-50" onClick={() => setNotificationOpen(false)}>
+    <div 
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 animate-in fade-in duration-200" 
+      onClick={() => setNotificationOpen(false)}
+    >
       <div 
-        className="absolute right-0 top-0 bottom-0 w-80 bg-white shadow-2xl overflow-y-auto"
+        className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-background shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-300"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold">Notifications</h3>
-            <button onClick={() => setNotificationOpen(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+        {/* Header */}
+        <div className="sticky top-0 bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 sm:p-6 shadow-lg z-10">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-white/20 backdrop-blur-lg rounded-full flex items-center justify-center">
+                <Bell size={20} />
+              </div>
+              <div>
+                <h3 className="text-lg sm:text-xl font-bold">Notifications</h3>
+                <p className="text-xs text-white/80">{unreadCount} unread</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => setNotificationOpen(false)} 
+              className="p-2 hover:bg-white/20 rounded-lg transition-colors active:scale-95"
+            >
               <X size={24} />
             </button>
           </div>
-        </div>
-        <div className="p-4 space-y-3">
-          {notifications.map((notif) => (
-            <div 
-              key={notif.id}
-              className={`p-4 rounded-lg border-l-4 ${
-                notif.type === 'success' ? 'bg-green-50 border-green-500' :
-                notif.type === 'warning' ? 'bg-yellow-50 border-yellow-500' :
-                'bg-blue-50 border-blue-500'
-              }`}
+          {unreadCount > 0 && (
+            <button
+              onClick={markAllAsRead}
+              className="text-xs sm:text-sm font-medium text-white/90 hover:text-white flex items-center gap-2 transition-colors"
             >
-              <div className="font-semibold text-sm">{notif.title}</div>
-              <div className="text-sm text-gray-600 mt-1">{notif.desc}</div>
-              <div className="text-xs text-gray-500 mt-2">{notif.time}</div>
+              <CheckCircle size={16} />
+              Mark all as read
+            </button>
+          )}
+        </div>
+
+        {/* Notifications List */}
+        <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
+          {notifications.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                <Bell className="text-muted-foreground" size={32} />
+              </div>
+              <h4 className="font-semibold text-foreground mb-1">All caught up!</h4>
+              <p className="text-sm text-muted-foreground">No new notifications</p>
             </div>
-          ))}
+          ) : (
+            notifications.map((notif) => {
+              const isRead = readNotifications.includes(notif.id);
+              const getNotifIcon = () => {
+                if (notif.type === 'success') return <CheckCircle className="text-green-600" size={20} />;
+                if (notif.type === 'warning') return <AlertCircle className="text-yellow-600" size={20} />;
+                return <Bell className="text-blue-600" size={20} />;
+              };
+              
+              return (
+                <div 
+                  key={notif.id}
+                  onClick={() => markAsRead(notif.id)}
+                  className={`group relative p-3 sm:p-4 rounded-xl border-2 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
+                    isRead 
+                      ? 'bg-muted/50 border-border hover:border-border' 
+                      : 'bg-card border-l-4 shadow-sm ' + (
+                          notif.type === 'success' ? 'border-green-500 hover:border-green-600' :
+                          notif.type === 'warning' ? 'border-yellow-500 hover:border-yellow-600' :
+                          'border-blue-500 hover:border-blue-600'
+                        )
+                  }`}
+                >
+                  {!isRead && (
+                    <div className="absolute top-3 right-3 w-2 h-2 bg-indigo-600 rounded-full animate-pulse" />
+                  )}
+                  
+                  <div className="flex items-start gap-3">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      notif.type === 'success' ? 'bg-green-100' :
+                      notif.type === 'warning' ? 'bg-yellow-100' :
+                      'bg-blue-100'
+                    }`}>
+                      {getNotifIcon()}
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className={`font-semibold text-sm sm:text-base mb-1 ${isRead ? 'text-muted-foreground' : 'text-foreground'}`}>
+                        {notif.title}
+                      </div>
+                      <div className={`text-xs sm:text-sm mb-2 ${isRead ? 'text-muted-foreground' : 'text-muted-foreground'}`}>
+                        {notif.desc}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Clock size={12} />
+                        <span>{notif.time}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
-        <div className="p-4 border-t border-gray-200 sticky bottom-0 bg-white">
-          <button className="w-full py-2 text-indigo-600 font-medium hover:bg-indigo-50 rounded-lg transition-colors">
-            View All Notifications
-          </button>
-        </div>
+
+        {/* Footer */}
+        {notifications.length > 0 && (
+          <div className="sticky bottom-0 p-4 border-t border-border bg-background/95 backdrop-blur-lg">
+            <button 
+              onClick={() => {
+                setNotificationOpen(false);
+                // Navigate to notifications page
+              }}
+              className="w-full py-3 text-indigo-600 font-semibold hover:bg-indigo-50 rounded-xl transition-all active:scale-95 border-2 border-transparent hover:border-indigo-200"
+            >
+              View All Notifications
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
